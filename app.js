@@ -3,20 +3,23 @@ const app = express();
 const bp = require('body-parser');
 const mongoose = require('mongoose');
 
-const config = require('./config/config.js');
+const dotenv = require('dotenv');
+dotenv.config();
 
 app.set('view engine', 'ejs');
 app.use(bp.urlencoded({ extended: true }));
 
+const PORT = process.env.PORT || 3000;
+
 const dbUri =
     'mongodb+srv://' +
-    global.config.db_user +
+    process.env.MONGOATLAS_DB_USER +
     ':' +
-    encodeURIComponent(global.config.db_password) +
+    encodeURIComponent(process.env.MONGOATLAS_DB_PW) +
     '@' +
-    global.config.database +
+    process.env.MONGOATLAS_DB_SRV +
     '.mongodb.net/' +
-    global.config.app_name +
+    process.env.MONGOATLAS_DB_APPNAME +
     '?retryWrites=true&w=majority';
 
 mongoose
@@ -39,10 +42,9 @@ app.get('/', (req, res) => {
 })
 
 
-app.listen(global.config.node_port, () => {
+app.listen(PORT, () => {
     console.log(
-        global.config.app_name.toUpperCase() +
-            ' Server has started on port ' +
-            global.config.node_port
+            'Server has started on port ' +
+            PORT
     );
 });
